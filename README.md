@@ -1,5 +1,4 @@
-![](https://github.com/hiweller/graphics/blob/master/blue_fish.png)
-
+<img src="https://github.com/hiweller/graphics/blob/master/blue_fish.png" width="48">
 # Demo and workshop materials
 
 This repository is a transformer! It's an all-purpose repository for various demo and workshop materials, to avoid repository creep. The only repository creep around here should be me.
