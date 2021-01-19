@@ -1,4 +1,4 @@
-![](https://github.com/hiweller/graphics/blob/master/blue_fish.png)
+<img src="https://github.com/hiweller/graphics/blob/master/blue_fish.png" width="48" align="center">
 
 # Demo and workshop materials
 
