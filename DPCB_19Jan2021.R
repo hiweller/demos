@@ -128,7 +128,8 @@ ggplot(pca_df, aes(x = PC1, y = PC2)) +
   xlab(paste0("PC1 (", pca_pct[1], "% var.)")) + 
   ylab(paste0("PC2 (", pca_pct[2], "% var.)")) + 
   theme_bw(base_size = 22) +
-  theme(line = element_blank())
+  theme(line = element_blank()) +
+  ggtitle("PCA")
 
 # we _kind_ of separate the groups in PC3:
 ggplot(pca_df, aes(x = PC1, y = PC3)) + 
@@ -141,7 +142,24 @@ ggplot(pca_df, aes(x = PC1, y = PC3)) +
   theme_bw(base_size = 22) +
   theme(line = element_blank())
 
-# 2. using tSNE
+# 2. using linear discriminant analysis
+# this has many parallels with PCA, but the important difference
+# is that we provide the group assignments from the start,
+# and LDA tries to find linear combinations of the input variables
+# which maximally separate the groups
+# (a simple form of supervised learning, as opposed to PCA being unsupervised)
+swissroll_df$group <- labels
+lda_fit <- MASS::lda(formula = group ~ .,
+                     data = swissroll_df)
+plot(lda_fit)
+plda <- predict(object = lda_fit,
+                newdata = swissroll_df)
+lda_df <- as.data.frame(cbind(plda$x, labels))
+colnames(lda_df) <- c("LD1", "LD2", "LD3", "group")
+head(lda_df)
+
+
+# 3. using tSNE
 swissroll2 <- Rtsne::normalize_input(swissroll)
 swissrollTsne <- Rtsne::Rtsne(swissroll2)
 tsne_df <- as.data.frame(swissrollTsne$Y)
@@ -155,12 +173,12 @@ ggplot(tsne_df, aes(x = V1, y = V2, color = group)) +
   scale_color_manual(values = cols) + 
   guides(color = FALSE) +
   theme_bw(base_size = 22) +
-  theme(line = element_blank())
-# ...but it's a useful visualization technique
+  theme(line = element_blank()) +
+  ggtitle("tSNE")
+# ...but it retains way more local structure!
 
-# 3. UMAP
+# 4. UMAP
 # newer, addresses some of the tSNE issues
-# ...and usually overkill for comparative biologists!
 swissroll_umap <- umap::umap(swissroll)
 swissroll_umap <- as.data.frame(swissroll_umap$layout)
 swissroll_umap$group <- factor(labels)
@@ -170,4 +188,6 @@ ggplot(swissroll_umap, aes(x = V1, y = V2, color = group)) +
   scale_color_manual(values = cols) + 
   guides(color = FALSE) +
   theme_bw(base_size = 22) +
+  ggtitle("UMAP") +
   theme(line = element_blank())
+# more info: https://pair-code.github.io/understanding-umap/
