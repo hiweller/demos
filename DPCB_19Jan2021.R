@@ -154,9 +154,18 @@ lda_fit <- MASS::lda(formula = group ~ .,
 plot(lda_fit)
 plda <- predict(object = lda_fit,
                 newdata = swissroll_df)
+lda_pct <- round(lda_fit$svd^2/sum(lda_fit$svd^2), 2) * 100
 lda_df <- as.data.frame(cbind(plda$x, labels))
 colnames(lda_df) <- c("LD1", "LD2", "LD3", "group")
-head(lda_df)
+ggplot(lda_df, aes(x = LD1, y = LD2, color = factor(group))) +
+  geom_point() +
+  scale_color_manual(values = cols) + 
+  guides(color = FALSE) +
+  theme_bw(base_size = 22) +
+  xlab(paste0("LD1 (", lda_pct[1], "%)")) + 
+  ylab(paste0("LD2 (", lda_pct[2], "%)")) + 
+  theme(line = element_blank()) +
+  ggtitle("LDA")
 
 
 # 3. using tSNE
