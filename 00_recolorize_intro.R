@@ -1,3 +1,6 @@
+# A general intro to how I'm handling color segmentation right now,
+# with an example on a single image
+
 # bookkeeping ####
 
 # for plotting pixels in various color spaces:
